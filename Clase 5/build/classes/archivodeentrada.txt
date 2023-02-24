@@ -1,0 +1,4 @@
+Evaluar[5+5] ;
+Evaluar[(5+5)*2];
+Evaluar[10+10+(20/2)];
+Evaluar[10+10+(20)];

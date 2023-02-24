@@ -1,0 +1,66 @@
+package analizador;
+import java_cup.runtime.*;
+import java.util.ArrayList;         // importar arraylist
+import Errores.Excepcion;           // importar la clase de errores
+
+
+
+//PARSER 
+parser code
+{://Codigo visible
+    
+    ///  declarar un arraylist para los errores sintacticos 
+    public  ArrayList<Excepcion> erroresSintacticos = new ArrayList<Excepcion>();
+
+    public void syntax_error(Symbol s){
+        //System.out.println("Error R de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
+        erroresSintacticos.add(new Excepcion("Sintáctico", "Error Recuperable de sintaxis: "+ s.value , Integer.toString(s.left+1), Integer.toString(s.right+1) ));
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        //System.out.println("Error NR de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
+        erroresSintacticos.add(new Excepcion("Sintáctico", "Error No Recuperable de sintaxis: "+ s.value , Integer.toString(s.left+1), Integer.toString(s.right+1) ));
+    }
+
+:}
+
+
+terminal String PTCOMA,PAR_IZQ,PAR_DER,COR_IZQ,COR_DER; // mismo nombre en el archivo lexico
+terminal String MAS,MENOS,POR,DIV;
+terminal String ENTERO;
+terminal String DECIMAL;
+terminal String UMENOS;                             // para la precedencia para los negativos y no en 
+terminal String REVALUAR;
+
+non terminal ini;                                   // terminales para las transiciones 
+non terminal instrucciones;
+non terminal instruccion;
+non terminal Double expresion;                      // el Double es el tipo que retorna la expresion 
+
+precedence left MAS,MENOS;                          // precedencia de operadores 
+precedence left POR,DIV;
+precedence right UMENOS; 
+
+start with ini;                                     // iniciar la gramataica 
+
+ini::=instrucciones;                                // produccion inicial 
+
+instrucciones ::= instruccion instrucciones
+ | instruccion
+; 
+
+instruccion ::=  
+   REVALUAR COR_IZQ expresion:a COR_DER PTCOMA{:System.out.println("El valor de la expresión es: "+a);:}
+   | error PTCOMA
+;
+
+expresion  ::= 
+    MENOS expresion:a                      {:RESULT=a*-1;  :}%prec UMENOS  
+ |  expresion:a MAS        expresion:b     {:RESULT=a+b;:}
+ |  expresion:a MENOS      expresion:b     {:RESULT=a-b;:}
+ |  expresion:a POR        expresion:b     {:RESULT=a*b;:}
+ |  expresion:a DIV   expresion:b     {:RESULT=a/b;:}
+ |  ENTERO:a                               {:RESULT=new Double(a);:}
+ |  DECIMAL:a                              {:RESULT=new Double(a);:}
+ |  PAR_IZQ expresion:a PAR_DER              {:RESULT=a;:}
+;
