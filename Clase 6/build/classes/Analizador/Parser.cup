@@ -1,0 +1,122 @@
+package analizador;
+import java_cup.runtime.*;
+import arbol.Nodo;
+
+
+
+//PARSER 
+parser code
+{://Codigo visible
+    public static Nodo raiz;
+
+    public void syntax_error(Symbol s){
+        System.out.println("Error R de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        System.out.println("Error NR de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
+    }
+
+    public Nodo getRaiz(){
+        return raiz;
+    }
+
+:}
+
+terminal String PTCOMA,PAR_IZQ,PAR_DER,LLAV_IZQ,LLAV_DER; // mismo nombre en el archivo lexico
+terminal String POR,PUNTO,ID,CADENA;
+terminal String IGUAL,OR,ER,PORCENTAJE;
+terminal String ENTERO;
+terminal String DECIMAL;
+
+// agregar el tipo de nodo
+non terminal inicio;                                   // terminales PAR_IZQ las transiciones 
+non terminal lista_expresiones;
+non terminal expresion;
+non terminal e;                      // el Double es el tipo que retorna la expresion 
+
+precedence left PUNTO;
+precedence left OR;
+precedence left POR;
+
+start with inicio;
+
+/*--------------- 3ra Area: Reglas Semanticas -----------------------*/
+
+inicio::= LLAV_IZQ:a lista_expresiones:b LLAV_DER:c    {: Nodo padre = new Nodo("inicio", "", 0,0); 
+                                                        Nodo hijo1 = new Nodo("llave_Izq", "{", aright, aleft);
+                                                        padre.AddHijo(hijo1);
+                                                        padre.AddHijo(b);
+                                                        Nodo hijo2 = new Nodo("llav_Der", "}", cright, cleft);
+                                                        padre.AddHijo(hijo2);
+                                                        raiz = padre; 
+                                                     :} 
+         | error
+       ;
+
+lista_expresiones::= lista_expresiones:a expresion:b    {: Nodo padre = new Nodo("lista_expresiones", "", 0,0);
+                                                           padre.AddHijo(a);
+                                                           padre.AddHijo(b);
+                                                           RESULT = padre; 
+                                                       :}
+       | expresion:a                                {: Nodo padre = new Nodo("lista_expresiones", "", 0,0);
+                                                           padre.AddHijo(a);
+                                                           RESULT = padre; 
+                                                     :}
+       ; 
+
+expresion::= ER:a IGUAL:b e:c PTCOMA:d      {: Nodo padre = new Nodo("expresion", "", 0,0);
+                                            Nodo hijo1 = new Nodo("ER", a, aright,aleft);
+                                            padre.AddHijo(hijo1);
+                                            Nodo hijo2 = new Nodo("IGUAL", b, bright,bleft);
+                                            padre.AddHijo(hijo2);
+                                            padre.AddHijo(c);
+                                            Nodo hijo4 = new Nodo("PTCOMA", d, dright,dleft);
+                                            padre.AddHijo(hijo4);
+                                           RESULT = padre; 
+                                      :}
+        | error
+        ;
+
+e::= e:a OR:b e:c         {: Nodo padre = new Nodo("e", "", 0,0); 
+                            padre.AddHijo(a);
+                            Nodo hijo1 = new Nodo("or", b, bright,bleft);
+                            padre.AddHijo(hijo1);
+                            padre.AddHijo(c);
+                            RESULT = padre; 
+                         :}
+   | e:a PUNTO:b e:c        {: Nodo padre = new Nodo("e", "", 0,0); 
+                            padre.AddHijo(a);
+                            Nodo hijo1 = new Nodo("CONCATENAR", b, bright,bleft);
+                            padre.AddHijo(hijo1);
+                            padre.AddHijo(c);
+                            RESULT = padre; 
+                         :}
+   | e:a POR:b          {: Nodo padre = new Nodo("e", "", 0,0); 
+                            padre.AddHijo(a);
+                            Nodo hijo1 = new Nodo("POR", b, bright,bleft);
+                            padre.AddHijo(hijo1);
+                            RESULT = padre; 
+                         :}
+   | PAR_IZQ:a e:b PAR_IZQ:c      {: Nodo padre = new Nodo("e", "", 0,0); 
+                            Nodo hijo1 = new Nodo("PAR_IZQ", a, aright,aleft);
+                            padre.AddHijo(hijo1);
+                            padre.AddHijo(b);
+                            Nodo hijo3 = new Nodo("PAR_DER", c, cright,cleft);
+                            padre.AddHijo(hijo3);
+                            RESULT = padre; 
+                         :}
+   | ID:ident              {: Nodo padre = new Nodo("e", "", 0,0); 
+                            Nodo hijo1 = new Nodo("id", ident, identright, identleft);
+                          
+                            padre.AddHijo(hijo1);
+                            
+                            RESULT = padre; 
+                         :}  
+   | CADENA:a         {: Nodo padre = new Nodo("e", "", 0,0); 
+                            Nodo hijo1 = new Nodo("cadena", a, aright,aleft);
+                            padre.AddHijo(hijo1);
+                            
+                            RESULT = padre; 
+                         :}  
+   ;

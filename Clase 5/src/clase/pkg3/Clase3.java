@@ -23,7 +23,7 @@ public class Clase3 {
     public static void main(String[] args) {
         // TODO code application logic here
         //interpretar("Evaluar[5+5]  \n Evaluar[(5+5)*2]; \n Evaluar[10+10+(20/2)];\n Evaluar[10+10+(20)]; ");
-        //graficar();
+        graficar();
     }
 
     // metodo de ejecucion 
@@ -78,7 +78,8 @@ public class Clase3 {
             pw.close();
             try {
                 ProcessBuilder proceso;
-                proceso = new ProcessBuilder("dot", "-Tpng", "-o", "ssprueba.jpg", "C:\\OLC1\\prueba.dot");
+                proceso = new ProcessBuilder("dot", "-Tjpg", "-o", "ssprueba.jpg", "prueba.dot");
+                System.out.println("finalizado");
                 proceso.start();
 
             } catch (Exception e) {

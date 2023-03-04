@@ -1,0 +1,27 @@
+<!
+     4R(H1V0 D3 PRU3B4 M3D10
+
+
+!>
+{
+
+//                       ----DEFINIENDO CONJUNTOS----
+CONJ: mayus - > A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
+CONJ: minus -     > a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z;
+CONJ: letra -  > a~z;
+CONJ: digito -  > 0~9; 
+
+//                       ----DEFINIENDO EXPRESIONES----
+frase -> ."C"."O"."M"."P"."I"."1" ? + | | {letra} {digito} " ";
+cadena  -   > . \' . + | | | | \n {minus} {mayus} {digito} " " \';
+%%
+%%
+cadena : "\'cadena entre comilla simple\'"; //bueno
+frase : "COMPI1 sale con 100"; // bueno
+}
+
+<!
+     12·$333544·%&//
+          ·····NO TE DESANIMES ESTO SALE CON 100
+     12·$333544·%&//
+!>
