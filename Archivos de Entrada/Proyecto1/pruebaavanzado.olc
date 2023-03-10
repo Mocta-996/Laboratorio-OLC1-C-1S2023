@@ -1,0 +1,23 @@
+// #############  ESTE ES UN COMENTARIO DE UNA SOLA LINEA, POR LO QUE NO DEBE
+//##############  DAR NINGUN PROBLEMA///////////////////---------
+{
+CONJ: numero - > 0,1,2,3,4, 5,6,7,   8, 9 ;
+CONJ: minuscula -     > a ~  z ;
+CONJ: mayuscula -> A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
+CONJ: simbolos - > -,_;
+
+//$%$%$%$%$%$%$%&/&/&/&/& ESTO NO DEBE DAR POBLEMA ============
+
+correoElectronico -> .|{minuscula} {mayuscula} . + | | | {simbolos} {minuscula} {mayuscula} {numero} . "@" . + | {minuscula} {mayuscula} . ".". "c" . "o" "m";
+url -> . "h". "t". "t". "p".?"s".":"."/"."/". + {minuscula} . "." + {minuscula};
+
+%%
+    %%
+
+<!
+                SECCIÓN DE PRUEBAS
+                    #YASALIO
+    !>
+url : "https://facebook.com"; //correcto
+correoElectronico : "lachalana666@ingusac.com"; //correcto
+}
