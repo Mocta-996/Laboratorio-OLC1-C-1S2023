@@ -1,0 +1,97 @@
+package analizador;
+import java_cup.runtime.*;
+
+//PARSER 
+parser code
+{://Codigo visible
+   
+
+    public void syntax_error(Symbol s){
+        System.out.println("Error R de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        System.out.println("Error NR de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
+    }
+
+:}
+
+terminal String RW_CONJ,PAR_IZQ,PAR_DER,LLAV_IZQ,LLAV_DER,GUION,MAYOR_QUE,PTCOMA,COMA,DOSPUNTOS; 
+terminal String DPORCENTAJE,VIRGULILLA, IGUAL,CONCATENACION,OR,KLEENE,POSITIVA,OPCIONAL,SALTO_LINEA;
+terminal String COMILLA_SIMPLE,COMILLA_DOBLE,ASCII, ENTERO, DECIMAL,LETRA,ID,CADENA ;
+
+
+non terminal inicio;                                 
+non terminal stmt, stmt_conjuntos, lista_notacion, valor,lista_valor;   
+non terminal stmt_expresionesRegulares, lista_expresiones, tipoExp;     
+non terminal stmt_lexemas, lexema;        
+
+
+start with inicio;
+
+// GRAMATICAS
+
+inicio  ::= LLAV_IZQ stmt LLAV_DER
+        ;
+
+stmt    ::= stmt stmt_conjuntos
+        | stmt stmt_expresionesRegulares
+        | stmt stmt_lexemas
+        | stmt_conjuntos  
+        | stmt_expresionesRegulares
+        | stmt_lexemas
+        ;
+
+// RECONOCIENDO CONJUNTOS 
+stmt_conjuntos ::= RW_CONJ DOSPUNTOS ID:id GUION MAYOR_QUE lista_notacion:val  PTCOMA 
+                    {:  System.out.println("ID: "+ id +" lista: "+val) ;:}
+                ;
+
+lista_notacion ::=  valor:a VIRGULILLA valor:b
+                {:RESULT = "["+ a +" - "+b+" ]";:}
+                | lista_valor:l 
+                {: RESULT = "[ "+ l+ "]"; :}
+                ;
+
+lista_valor     ::= lista_valor:l COMA valor :a
+                {:RESULT = l + " , " + a ;:}
+                | valor:a    {:RESULT =a;:}
+                ;
+
+valor   ::=  ENTERO:a  {:RESULT =  a; :}
+        |   LETRA:a {:RESULT =  a ;:}
+        |   ASCII:a {:RESULT =  a ;:}
+        ;
+
+// RECONOCIENDO EXPRESIONES REGULARES
+stmt_expresionesRegulares ::= ID:id GUION MAYOR_QUE lista_expresiones:val PTCOMA
+                            {:  System.out.println("ID_EXPRESION: "+ id +" listaExpresiones: "+val) ;:}
+                            ;
+
+
+lista_expresiones ::= lista_expresiones:l tipoExp:te {:RESULT = l + " " + te ;:}
+                    | tipoExp:te {:RESULT = te ;:}
+                    ;
+
+tipoExp ::= CONCATENACION:a {:RESULT = a ;:}
+        |   OR:a {:RESULT = a ;:}
+        |   KLEENE:a {:RESULT = a ;:}
+        |   POSITIVA:a {:RESULT = a ;:}
+        |   OPCIONAL:a {:RESULT = a ;:}
+        |   SALTO_LINEA:a {:RESULT = a ;:}
+        |   COMILLA_SIMPLE:a {:RESULT = a ;:}
+        |   COMILLA_DOBLE:a {:RESULT = a ;:}
+        |   LLAV_IZQ ID:a  LLAV_DER {:RESULT = a ;:}
+        |   CADENA:a {:RESULT = a ;:}
+        ;
+
+// RECONOCIENDO LEXEMAS
+stmt_lexemas ::= DPORCENTAJE DPORCENTAJE lexema
+                | lexema
+                ;
+
+
+
+lexema  ::= ID:id  DOSPUNTOS CADENA:a  PTCOMA
+                {:  System.out.println("ID_LEXEMA: "+ id +" CADENA: "+a) ;:}
+            ;

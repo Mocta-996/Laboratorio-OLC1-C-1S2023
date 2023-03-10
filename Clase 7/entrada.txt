@@ -1,0 +1,24 @@
+{
+
+    // prueba de comentario de una linea
+    <!comentario 
+    multilinea
+    !>
+
+    // declaracion de conjuntos
+    CONJ: abecedarioMinus -> a~z;
+    CONJ: digito -> 0~5; 
+    CONJ: asci -> #~%; 
+    CONJ: mayus - > A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z;
+
+    // definiendo expresiones
+    frase -> ."C"."O"."M"."P"."I"."1" ? + | | {letra} {digito} " ";
+    cadena  -   > . \' . + | | | | \n {minus} {mayus} {digito} " " \';
+    correoElectronico -> .|{minuscula} {mayuscula} . + | | | {simbolos} {minuscula} {mayuscula} {numero} . "@" . + | {minuscula} {mayuscula} . ".". "c" . "o" "m";
+    url -> . "h". "t". "t". "p".?"s".":"."/"."/". + {minuscula} . "." + {minuscula};
+
+    %%
+    %%
+    url : "https://facebook.com"; 
+    correoElectronico : "lachalana666@ingusac.com"; //correcto
+}

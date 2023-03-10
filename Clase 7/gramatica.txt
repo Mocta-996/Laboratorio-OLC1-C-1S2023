@@ -1,0 +1,53 @@
+inicio ::= llav_Izq  cuerpo llav_Der;
+
+cuerpo  ::= cuerpo conjuntos
+        |cuerpo expresiones
+        | cuerpo  lexemas
+        | conjuntos
+        | expresiones
+        | lexemas
+        ;
+
+conjuntos ::= RW_CONJ DOSPUNTOS ID GUION MAYORQUE lista_valores  PTCOMA
+
+
+lista_valores ::= valor virgulilla valor
+                | lista_valor
+
+valor ::= LETRA
+        | SALTOLINEA
+        | COMILLASIMP
+        | COMILLADOBLE
+        | DIGITO
+        | CARACTER
+        | ID
+
+lista_valor     ::= lista_valor COMA valor
+                | valor
+                ;
+
+expresiones ::= ID  GUION MAYORQUE exp PTCOMA
+
+exp         ::= concat exp exp
+            | or exp exp 
+            | kleen exp
+            | mas  exp
+            | inter exp
+            | llav_Izq id llav_Der
+            | CADENA
+
+
+lexemas     ::= DOBLEPORC DOBLEPORC lista_validaciones
+
+lista_validaciones  ::= lista_validaciones  lexema
+                    | lexema
+                    ;
+
+lexema  ::= ID DOSPUNTOS  CADENA PTCOMA
+
+
+\\n
+\\' 
+\\\" 
+
+   
