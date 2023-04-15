@@ -1,6 +1,7 @@
 import { Instruction } from "../abstract/Instruction";
 import { Expression } from "../abstract/Expression";
 import { printlist } from "../Reports/PrintList";
+import { Environment } from "../abstract/Environment";
 
 export class Print extends Instruction {
   constructor(
@@ -11,8 +12,8 @@ export class Print extends Instruction {
     super(line, column);
   }
 
-  public execute(): void {
-    const value = this.expression.execute(); // value and type
+  public execute(env:Environment): void {
+    const value = this.expression.execute(env); // value and type
     printlist.push(value.value);
     console.log("desde consola:" ,value.value);
   }

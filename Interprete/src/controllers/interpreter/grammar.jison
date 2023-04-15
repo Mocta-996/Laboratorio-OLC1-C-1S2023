@@ -78,6 +78,7 @@
   const {Type} = require('./abstract/Return');
   const {Primitivo} = require('./expression/Primitivo');
   const {Print} = require('./instruction/Print');
+  const {Declarar} = require('./instruction/Declarar');
 
 %}
 
@@ -102,6 +103,7 @@ INSTRUCCIONES
 
 INSTRUCCION
 	: DEFPRINT          { $$ = $1; }
+  | DECLARAR          { $$ = $1; }
 	| error PTCOMA
   {   console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);}
 ;
@@ -110,11 +112,22 @@ INSTRUCCION
 DEFPRINT
     : RPRIN PARIZQ EXPRESION PARDER PTCOMA  { $$ = new Print(@1.first_line, @1.first_column,$3); }
 ;
+// print(EXPRESION);
+
+
+// GRAMATICA DECLARAR
+//  int a = 5;
+//  int a ;
+DECLARAR
+    : TIPO ID PTCOMA  { $$ = new Declarar($2,$1,null,@1.first_line, @1.first_column ); }
+    | TIPO ID IGUAL EXPRESION PTCOMA  { $$ = new Declarar($2,$1,$4,@1.first_line, @1.first_column ); }
+;
 
 
 EXPRESION
   : PRIMITIVO       { $$ = $1; }
 ;
+
 
 PRIMITIVO
   : ENTERO          { $$ = new Primitivo(@1.first_line, @1.first_column,$1,Type.INT); }
@@ -123,4 +136,14 @@ PRIMITIVO
   | CARACTER        { $$ = new Primitivo(@1.first_line, @1.first_column,$1,Type.CHAR); }
   | TRUE            { $$ = new Primitivo(@1.first_line, @1.first_column,$1,Type.BOOLEAN); }
   | FALSE           { $$ = new Primitivo(@1.first_line, @1.first_column,$1,Type.BOOLEAN); }
+;
+
+
+// GRAMATICA TIPO
+TIPO
+  : RENTERO         { $$ = Type.INT; }
+  | RDOUBLE         { $$ = Type.DOUBLE; }
+  | RSTRING         { $$ = Type.STRING; }
+  | RCHAR           { $$ = Type.CHAR; }
+  | RBOOLEAN        { $$ = Type.BOOLEAN; }
 ;

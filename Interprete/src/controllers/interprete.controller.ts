@@ -1,6 +1,7 @@
 // importar librerias
 import { Request, Response } from "express";
 import { printlist } from "./interpreter/Reports/PrintList";
+import { Environment } from "./interpreter/abstract/Environment";
 // creando una clase controlador
 
 class InterpreteController {
@@ -24,10 +25,12 @@ class InterpreteController {
       const ast = parser.parse(text); //ast es el arbol de sintaxis abstracta
       try {
         printlist.splice(0, printlist.length);
+        const globalEnv = new Environment(null);
+
         for (const inst of ast){
-            inst.execute();
+            inst.execute(globalEnv);
         }
-        res.json({ consola:printlist, errores: "ninguno" });
+        res.json({ consola:printlist.join("\n"), errores: "ninguno" });
 
       } catch (error) {
         console.log(error);
