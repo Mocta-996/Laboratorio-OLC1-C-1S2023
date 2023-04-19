@@ -76,9 +76,14 @@
 %{
   // importar tipos
   const {Type} = require('./abstract/Return');
+  const {TipoAritmetica} = require('./utils/TipoAritmetica');
   const {Primitivo} = require('./expression/Primitivo');
   const {Print} = require('./instruction/Print');
   const {Declarar} = require('./instruction/Declarar');
+  const {Acceso} = require('./expression/Acceso');
+  const {Aritmetica} = require('./expression/Aritmetica');
+
+
 
 %}
 
@@ -126,8 +131,22 @@ DECLARAR
 
 EXPRESION
   : PRIMITIVO       { $$ = $1; }
+  | ACCEDERVAR      { $$ = $1; }
+  | ARITMETICA      { $$ = $1; }
+
 ;
 
+// OPERACION ARITMETICA
+ARITMETICA
+  : EXPRESION MAS EXPRESION     { $$ = new Aritmetica($1,$3,TipoAritmetica.SUMA,@1.first_line, @1.first_column); }
+  | EXPRESION MENOS EXPRESION   { $$ = new Aritmetica($1,$3,TipoAritmetica.RESTA,@1.first_line, @1.first_column); }
+  | MENOS EXPRESION %prec UMENOS { $$ = new Aritmetica($2,$2,TipoAritmetica.UMENOS,@1.first_line, @1.first_column); }  
+;
+
+// ACCEDER A UNA VARIABLE
+ACCEDERVAR
+  : ID              { $$ = new Acceso($1,@1.first_line, @1.first_column); }
+;
 
 PRIMITIVO
   : ENTERO          { $$ = new Primitivo(@1.first_line, @1.first_column,$1,Type.INT); }

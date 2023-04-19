@@ -72,12 +72,12 @@
   }
 */
 var grammar = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,7],$V2=[1,9],$V3=[1,10],$V4=[1,11],$V5=[1,12],$V6=[1,13],$V7=[2,5,10,24,25,26,27,28],$V8=[1,21],$V9=[1,22],$Va=[1,23],$Vb=[1,24],$Vc=[1,25],$Vd=[1,26],$Ve=[9,13];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,7],$V2=[1,9],$V3=[1,10],$V4=[1,11],$V5=[1,12],$V6=[1,13],$V7=[2,5,10,28,29,30,31,32],$V8=[1,29],$V9=[1,30],$Va=[1,23],$Vb=[1,24],$Vc=[1,25],$Vd=[1,26],$Ve=[1,27],$Vf=[1,28],$Vg=[1,34],$Vh=[1,35],$Vi=[9,13,20,21];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"INSTRUCCIONES":4,"EOF":5,"INSTRUCCION":6,"DEFPRINT":7,"DECLARAR":8,"PTCOMA":9,"RPRIN":10,"PARIZQ":11,"EXPRESION":12,"PARDER":13,"TIPO":14,"ID":15,"IGUAL":16,"PRIMITIVO":17,"ENTERO":18,"DECIMAL":19,"CADENA":20,"CARACTER":21,"TRUE":22,"FALSE":23,"RENTERO":24,"RDOUBLE":25,"RSTRING":26,"RCHAR":27,"RBOOLEAN":28,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",9:"PTCOMA",10:"RPRIN",11:"PARIZQ",13:"PARDER",15:"ID",16:"IGUAL",18:"ENTERO",19:"DECIMAL",20:"CADENA",21:"CARACTER",22:"TRUE",23:"FALSE",24:"RENTERO",25:"RDOUBLE",26:"RSTRING",27:"RCHAR",28:"RBOOLEAN"},
-productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,1],[6,2],[7,5],[8,3],[8,5],[12,1],[17,1],[17,1],[17,1],[17,1],[17,1],[17,1],[14,1],[14,1],[14,1],[14,1],[14,1]],
+symbols_: {"error":2,"INICIO":3,"INSTRUCCIONES":4,"EOF":5,"INSTRUCCION":6,"DEFPRINT":7,"DECLARAR":8,"PTCOMA":9,"RPRIN":10,"PARIZQ":11,"EXPRESION":12,"PARDER":13,"TIPO":14,"ID":15,"IGUAL":16,"PRIMITIVO":17,"ACCEDERVAR":18,"ARITMETICA":19,"MAS":20,"MENOS":21,"ENTERO":22,"DECIMAL":23,"CADENA":24,"CARACTER":25,"TRUE":26,"FALSE":27,"RENTERO":28,"RDOUBLE":29,"RSTRING":30,"RCHAR":31,"RBOOLEAN":32,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",9:"PTCOMA",10:"RPRIN",11:"PARIZQ",13:"PARDER",15:"ID",16:"IGUAL",20:"MAS",21:"MENOS",22:"ENTERO",23:"DECIMAL",24:"CADENA",25:"CARACTER",26:"TRUE",27:"FALSE",28:"RENTERO",29:"RDOUBLE",30:"RSTRING",31:"RCHAR",32:"RBOOLEAN"},
+productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,1],[6,2],[7,5],[8,3],[8,5],[12,1],[12,1],[12,1],[19,3],[19,3],[19,2],[18,1],[17,1],[17,1],[17,1],[17,1],[17,1],[17,1],[14,1],[14,1],[14,1],[14,1],[14,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -92,7 +92,7 @@ break;
 case 3:
  this.$ = [$$[$0]]; 
 break;
-case 4: case 5: case 10:
+case 4: case 5: case 10: case 11: case 12:
  this.$ = $$[$0]; 
 break;
 case 6:
@@ -107,40 +107,52 @@ break;
 case 9:
  this.$ = new Declarar($$[$0-3],$$[$0-4],$$[$0-1],_$[$0-4].first_line, _$[$0-4].first_column ); 
 break;
-case 11:
- this.$ = new Primitivo(_$[$0].first_line, _$[$0].first_column,$$[$0],Type.INT); 
-break;
-case 12:
- this.$ = new Primitivo(_$[$0].first_line, _$[$0].first_column,$$[$0],Type.DOUBLE); 
-break;
 case 13:
- this.$ = new Primitivo(_$[$0].first_line, _$[$0].first_column,$$[$0],Type.STRING);
+ this.$ = new Aritmetica($$[$0-2],$$[$0],TipoAritmetica.SUMA,_$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 14:
- this.$ = new Primitivo(_$[$0].first_line, _$[$0].first_column,$$[$0],Type.CHAR); 
+ this.$ = new Aritmetica($$[$0-2],$$[$0],TipoAritmetica.RESTA,_$[$0-2].first_line, _$[$0-2].first_column); 
 break;
-case 15: case 16:
- this.$ = new Primitivo(_$[$0].first_line, _$[$0].first_column,$$[$0],Type.BOOLEAN); 
+case 15:
+ this.$ = new Aritmetica($$[$0],$$[$0],TipoAritmetica.UMENOS,_$[$0-1].first_line, _$[$0-1].first_column); 
+break;
+case 16:
+ this.$ = new Acceso($$[$0],_$[$0].first_line, _$[$0].first_column); 
 break;
 case 17:
- this.$ = Type.INT; 
+ this.$ = new Primitivo(_$[$0].first_line, _$[$0].first_column,$$[$0],Type.INT); 
 break;
 case 18:
- this.$ = Type.DOUBLE; 
+ this.$ = new Primitivo(_$[$0].first_line, _$[$0].first_column,$$[$0],Type.DOUBLE); 
 break;
 case 19:
- this.$ = Type.STRING; 
+ this.$ = new Primitivo(_$[$0].first_line, _$[$0].first_column,$$[$0],Type.STRING);
 break;
 case 20:
+ this.$ = new Primitivo(_$[$0].first_line, _$[$0].first_column,$$[$0],Type.CHAR); 
+break;
+case 21: case 22:
+ this.$ = new Primitivo(_$[$0].first_line, _$[$0].first_column,$$[$0],Type.BOOLEAN); 
+break;
+case 23:
+ this.$ = Type.INT; 
+break;
+case 24:
+ this.$ = Type.DOUBLE; 
+break;
+case 25:
+ this.$ = Type.STRING; 
+break;
+case 26:
  this.$ = Type.CHAR; 
 break;
-case 21:
+case 27:
  this.$ = Type.BOOLEAN; 
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,6:3,7:4,8:5,10:$V1,14:8,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{1:[3]},{2:$V0,5:[1,14],6:15,7:4,8:5,10:$V1,14:8,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},o($V7,[2,3]),o($V7,[2,4]),o($V7,[2,5]),{9:[1,16]},{11:[1,17]},{15:[1,18]},{15:[2,17]},{15:[2,18]},{15:[2,19]},{15:[2,20]},{15:[2,21]},{1:[2,1]},o($V7,[2,2]),o($V7,[2,6]),{12:19,17:20,18:$V8,19:$V9,20:$Va,21:$Vb,22:$Vc,23:$Vd},{9:[1,27],16:[1,28]},{13:[1,29]},o($Ve,[2,10]),o($Ve,[2,11]),o($Ve,[2,12]),o($Ve,[2,13]),o($Ve,[2,14]),o($Ve,[2,15]),o($Ve,[2,16]),o($V7,[2,8]),{12:30,17:20,18:$V8,19:$V9,20:$Va,21:$Vb,22:$Vc,23:$Vd},{9:[1,31]},{9:[1,32]},o($V7,[2,7]),o($V7,[2,9])],
-defaultActions: {9:[2,17],10:[2,18],11:[2,19],12:[2,20],13:[2,21],14:[2,1]},
+table: [{2:$V0,3:1,4:2,6:3,7:4,8:5,10:$V1,14:8,28:$V2,29:$V3,30:$V4,31:$V5,32:$V6},{1:[3]},{2:$V0,5:[1,14],6:15,7:4,8:5,10:$V1,14:8,28:$V2,29:$V3,30:$V4,31:$V5,32:$V6},o($V7,[2,3]),o($V7,[2,4]),o($V7,[2,5]),{9:[1,16]},{11:[1,17]},{15:[1,18]},{15:[2,23]},{15:[2,24]},{15:[2,25]},{15:[2,26]},{15:[2,27]},{1:[2,1]},o($V7,[2,2]),o($V7,[2,6]),{12:19,15:$V8,17:20,18:21,19:22,21:$V9,22:$Va,23:$Vb,24:$Vc,25:$Vd,26:$Ve,27:$Vf},{9:[1,31],16:[1,32]},{13:[1,33],20:$Vg,21:$Vh},o($Vi,[2,10]),o($Vi,[2,11]),o($Vi,[2,12]),o($Vi,[2,17]),o($Vi,[2,18]),o($Vi,[2,19]),o($Vi,[2,20]),o($Vi,[2,21]),o($Vi,[2,22]),o($Vi,[2,16]),{12:36,15:$V8,17:20,18:21,19:22,21:$V9,22:$Va,23:$Vb,24:$Vc,25:$Vd,26:$Ve,27:$Vf},o($V7,[2,8]),{12:37,15:$V8,17:20,18:21,19:22,21:$V9,22:$Va,23:$Vb,24:$Vc,25:$Vd,26:$Ve,27:$Vf},{9:[1,38]},{12:39,15:$V8,17:20,18:21,19:22,21:$V9,22:$Va,23:$Vb,24:$Vc,25:$Vd,26:$Ve,27:$Vf},{12:40,15:$V8,17:20,18:21,19:22,21:$V9,22:$Va,23:$Vb,24:$Vc,25:$Vd,26:$Ve,27:$Vf},o($Vi,[2,15]),{9:[1,41],20:$Vg,21:$Vh},o($V7,[2,7]),o($Vi,[2,13]),o($Vi,[2,14]),o($V7,[2,9])],
+defaultActions: {9:[2,23],10:[2,24],11:[2,25],12:[2,26],13:[2,27],14:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -391,9 +403,14 @@ _handle_error:
 
   // importar tipos
   const {Type} = require('./abstract/Return');
+  const {TipoAritmetica} = require('./utils/TipoAritmetica');
   const {Primitivo} = require('./expression/Primitivo');
   const {Print} = require('./instruction/Print');
   const {Declarar} = require('./instruction/Declarar');
+  const {Acceso} = require('./expression/Acceso');
+  const {Aritmetica} = require('./expression/Aritmetica');
+
+
 
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
@@ -749,13 +766,13 @@ case 11:return 16;
 break;
 case 12:return 10;   // funcion de imprimir
 break;
-case 13:return 22;
+case 13:return 26;
 break;
-case 14:return 23;
+case 14:return 27;
 break;
-case 15:return 'MAS';
+case 15:return 20;
 break;
-case 16:return 'MENOS';
+case 16:return 21;
 break;
 case 17:return 'POR';
 break;
@@ -765,15 +782,15 @@ case 19:return 'POTENCIA';
 break;
 case 20:return 'MODULO';
 break;
-case 21:return 24;
+case 21:return 28;
 break;
-case 22:return 26;
+case 22:return 30;
 break;
-case 23:return 27;
+case 23:return 31;
 break;
-case 24:return 28;
+case 24:return 32;
 break;
-case 25:return 25;
+case 25:return 29;
 break;
 case 26:
 break;
@@ -785,11 +802,11 @@ case 29:
 break;
 case 30:return 15;
 break;
-case 31:return 19;
+case 31:return 23;
 break;
-case 32:return 18;
+case 32:return 22;
 break;
-case 33: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 21; 
+case 33: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 25; 
 break;
 case 34:cadena="";this.begin("string");
 break;
@@ -805,7 +822,7 @@ case 39:cadena+="\\";
 break;
 case 40:cadena+="\'";
 break;
-case 41:yy_.yytext=cadena; this.popState(); return 20;
+case 41:yy_.yytext=cadena; this.popState(); return 24;
 break;
 case 42:return 5;
 break;

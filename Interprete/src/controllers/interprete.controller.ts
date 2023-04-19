@@ -25,6 +25,7 @@ class InterpreteController {
       const ast = parser.parse(text); //ast es el arbol de sintaxis abstracta
       try {
         printlist.splice(0, printlist.length);
+        
         const globalEnv = new Environment(null);
 
         for (const inst of ast){
