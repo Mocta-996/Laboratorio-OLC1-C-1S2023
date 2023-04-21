@@ -82,7 +82,10 @@
   const {Declarar} = require('./instruction/Declarar');
   const {Acceso} = require('./expression/Acceso');
   const {Aritmetica} = require('./expression/Aritmetica');
-
+  const {Statement} = require('./instruction/Statement');
+  const {Funcion} = require('./instruction/Funcion');
+  const {Parametros} = require('./expression/Parametros');
+  const {LlamadaFuncion} = require('./expression/LlamadaFuncion');
 
 
 %}
@@ -109,6 +112,8 @@ INSTRUCCIONES
 INSTRUCCION
 	: DEFPRINT          { $$ = $1; }
   | DECLARAR          { $$ = $1; }
+  | LLAMADAFUNCION PTCOMA    { $$ = $1; } 
+  | GUARDARFUNCION         { $$ = $1; }
 	| error PTCOMA
   {   console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);}
 ;
@@ -128,6 +133,26 @@ DECLARAR
     | TIPO ID IGUAL EXPRESION PTCOMA  { $$ = new Declarar($2,$1,$4,@1.first_line, @1.first_column ); }
 ;
 
+// guardar funcion
+GUARDARFUNCION
+  : TIPO ID PARIZQ PARDER STATEMENT  { $$ = new Funcion($1,$2,[],$5,@1.first_line, @1.first_column ); }
+  | TIPO ID PARIZQ PARAMETROS PARDER STATEMENT  { $$ = new Funcion($1,$2,$4,$6,@1.first_line, @1.first_column ); }
+;
+// STATEMENT
+STATEMENT
+  : LLAVEIZQ INSTRUCCIONES LLAVEDER   { $$ = new Statement($2,@1.first_line, @1.first_column); }
+;
+
+// PARAMETROS
+
+PARAMETROS
+  : PARAMETROS COMA PARAMETRO   { $1.push($3); $$ = $1; }
+  | PARAMETRO                   { $$ = [$1]; }
+;
+
+PARAMETRO
+  : TIPO ID  {$$ = new Parametros($1,$2,@1.first_line, @1.first_column);}
+;
 
 EXPRESION
   : PRIMITIVO       { $$ = $1; }
@@ -135,6 +160,21 @@ EXPRESION
   | ARITMETICA      { $$ = $1; }
 
 ;
+
+// Llamada funcion
+
+// llamada a funciones
+LLAMADAFUNCION
+  : ID PARIZQ PARDER { $$ = new LlamadaFuncion($1,[],@1.first_line, @1.first_column); }
+  | ID PARIZQ ARGUMENTOS PARDER { $$ = new LlamadaFuncion($1,$3,@1.first_line, @1.first_column); }
+;
+
+// argumentos
+ARGUMENTOS
+  : ARGUMENTOS COMA EXPRESION { $1.push($3); $$ = $1;}
+  | EXPRESION { $$ = [$1];}
+;
+
 
 // OPERACION ARITMETICA
 ARITMETICA
