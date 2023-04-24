@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import Editor from "../components/Editor";
+import Consola from "../components/Consola";
 import axios from "axios";
 
 function Home(){
@@ -36,18 +37,19 @@ function Home(){
                     <h1>Editor</h1>
                 </Col>
                 <Col>
-                    <h1>Console</h1>
+                    <h1>Consola</h1>
                 </Col>
 
             </Row>
             <Row>
                 <Col style={{ textAlign: 'left' }}>
-                    {/*<textarea id="editor" rows="20" cols="50"></textarea>*/}
                     <Editor input={setEditor}/>
                 </Col>
-                <Col>
-                <textarea id="editor" rows="20" cols="50" value={consola}></textarea>
+                
+                <Col style={{ textAlign: 'left' }}>
+                    <Consola consola={consola}/>
                 </Col>
+              
             </Row>
             {/*seccion de botones */}
             <Row>
