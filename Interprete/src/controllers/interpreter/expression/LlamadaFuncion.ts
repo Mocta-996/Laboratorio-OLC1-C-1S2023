@@ -39,4 +39,8 @@ export class LlamadaFuncion extends Expression {
             console.log("Error, La funcion " + this.id + " no existe, linea " + this.line + " y columna " + this.column);
           }
     }
+
+    public drawAst(): { rama: string; nodo: string; } {
+      return {rama:"", nodo:""};
+    }
 }

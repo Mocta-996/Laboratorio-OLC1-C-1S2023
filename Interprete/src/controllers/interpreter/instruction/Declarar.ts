@@ -27,5 +27,37 @@ export class Declarar extends Instruction {
     }
   }
 
+  public drawAst(): { rama: string; nodo: string; } {
+    // generar un id unico
+    const id = Math.floor(Math.random() * (100 - 0) + 0);
+    // generar el nodo
+    const nodoPrincipal = `nodoDeclarar${id.toString()}`;
+    const nodoIdPrincipal = `nodoId${id.toString()}`;
+    // generar codigo ast de la expresion
+    if (this.valor != null) {
+      const codigoAST:{rama:string, nodo:string} = this.valor.drawAst();
+      let ramaDeclarar = `${nodoPrincipal}[label="Declarar"];\n `;
+      // agregar el nodo del id
+      ramaDeclarar += `${nodoIdPrincipal}[label="${this.id.toString()}"];\n`;
+      // agregar la rama de la expresion
+      ramaDeclarar += codigoAST.rama+ "\n";
+      // conectar el nodo del id con el nodo principal
+      ramaDeclarar += `${nodoPrincipal} -> ${nodoIdPrincipal};\n`;
+      // Declarar -> var -> valor
+      // conectar el nodo id con  el nodo de la expresion
+      ramaDeclarar += `${nodoIdPrincipal} -> ${codigoAST.nodo};\n`;
+      return { rama: ramaDeclarar, nodo: nodoPrincipal };
+
+    }else {
+      let ramaDeclarar = `${nodoPrincipal}[label="Declarar"];\n `;
+      // agregar el nodo del id
+      ramaDeclarar += `${nodoIdPrincipal}[label="${this.id.toString()}"];\n`;
+      // conectar el nodo del id con el nodo principal
+      // Declarar -> var
+      ramaDeclarar += `${nodoPrincipal} -> ${nodoIdPrincipal};\n`;
+      return { rama: ramaDeclarar, nodo: nodoPrincipal };
+    }
+  }
+
 
 }

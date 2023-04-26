@@ -13,5 +13,8 @@ export class Funcion extends Instruction{
         // guardar la funcion en entorno
         env.guardarFuncion(this.id,this);
     }
+    public drawAst(): { rama: string; nodo: string; } {
+        return {rama:"", nodo:""};
+      }
     
 }

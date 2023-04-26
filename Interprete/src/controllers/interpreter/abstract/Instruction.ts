@@ -8,5 +8,6 @@ export abstract class Instruction{
       this.column = column
   }
   public abstract execute(env:Environment):any;
+  public abstract drawAst():{rama:string, nodo:string};
 
 }

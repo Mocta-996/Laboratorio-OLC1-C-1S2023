@@ -31,7 +31,22 @@ class InterpreteController {
         for (const inst of ast){
             inst.execute(globalEnv);
         }
-        res.json({ consola:printlist.join("\n"), errores: "ninguno" });
+
+          //obtener el ast
+          let drawast = `
+          digraph G{
+              nodoPrincipal[label="AST"];\n
+          `;
+          for (const inst of ast) {
+            const dAst = inst.drawAst();
+            drawast += `${dAst.rama}\n`;
+            drawast += `nodoPrincipal -> ${dAst.nodo};`;
+          }
+
+          drawast += "\n}";
+
+
+        res.json({ consola:printlist.join("\n"), errores: "ninguno", ast: drawast });
 
       } catch (error) {
         console.log(error);

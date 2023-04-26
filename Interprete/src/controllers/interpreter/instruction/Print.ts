@@ -18,5 +18,17 @@ export class Print extends Instruction {
     console.log("desde consola:" ,value.value);
   }
 
+  public drawAst(): { rama: string; nodo: string; } {
+    // generar un id
+    const id = Math.floor(Math.random() * (100-0)+0);
+    // generar el nombre del nodo
+    const nodoPrincipal = `nodoPrint${id.toString()}`;
+    let ramaPrint = `${nodoPrincipal}[label="Print"];\n`
+    const codigoRama:{rama:string, nodo:string} = this.expression.drawAst();
+    ramaPrint += codigoRama.rama;
+    ramaPrint += `${nodoPrincipal} -> ${codigoRama.nodo};\n`
+    return {rama:ramaPrint, nodo:nodoPrincipal};
+  }
+
 }
 

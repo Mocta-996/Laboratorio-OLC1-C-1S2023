@@ -16,4 +16,8 @@ export class Parametros extends Expression {
       // verificar el parametro
       return { value: this.id, type: this.tipo };
     }
+
+    public drawAst(): { rama: string; nodo: string; } {
+      return {rama:"", nodo:""};
+    }
   }
