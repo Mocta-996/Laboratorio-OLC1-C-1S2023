@@ -4,7 +4,8 @@ export enum Type{
   BOOLEAN = 2,
   CHAR = 3,
   STRING = 4,
-  NULL = 5
+  NULL = 5,
+  RETURN = 6,
 }
 
 

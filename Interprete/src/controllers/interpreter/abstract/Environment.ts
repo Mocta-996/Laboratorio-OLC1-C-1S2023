@@ -99,5 +99,24 @@ export class Environment {
     // retornar el entorno global
     return env;
   }
+
+   // modificar una variable
+  public modificar(id: string, valor: any) {
+    // verificar el ambito
+    let env: Environment | null = this;
+    while (env != null) {
+      // verificar si la variable existe
+      if (env.variables.has(id.toLowerCase())) {
+        // modificar la variable
+        env.variables.get(id.toLowerCase())!.valor = valor;
+        return;
+      }
+      // cambiar de ambito
+      env = env.anterior;
+    }
+  }
+
+
+
 }
   

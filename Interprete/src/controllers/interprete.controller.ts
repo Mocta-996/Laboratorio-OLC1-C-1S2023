@@ -2,6 +2,8 @@
 import { Request, Response } from "express";
 import { printlist } from "./interpreter/Reports/PrintList";
 import { Environment } from "./interpreter/abstract/Environment";
+import { Funcion } from "./interpreter/instruction/Funcion";
+import { Declarar } from "./interpreter/instruction/Declarar";
 // creando una clase controlador
 
 class InterpreteController {
@@ -27,10 +29,29 @@ class InterpreteController {
         printlist.splice(0, printlist.length);
         
         const globalEnv = new Environment(null);
+        // primera pasada del parser
+        // declaraciones de variables, metodos,funciones, listas, vectores, etc
 
         for (const inst of ast){
+          if(inst instanceof Declarar){
+            //console.log("funcion encontrada");
             inst.execute(globalEnv);
+          }else if(inst instanceof Funcion){
+            inst.execute(globalEnv);
+          }
         }
+        
+
+        // seguna pasada para el main
+        /*for (const inst of ast){
+          if(inst instanceof Main){
+            inst.execute(globalEnv);
+          }
+        }*/
+        
+        /*for (const inst of ast){
+            inst.execute(globalEnv);
+        }*/
 
           //obtener el ast
           let drawast = `
